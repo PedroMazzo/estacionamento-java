@@ -1,6 +1,7 @@
 package br.com.estacionamento.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -148,7 +149,7 @@ public class Estacionamento {
         if (this.valorCalculado.compareTo(valorDiaria) > 0) {
             this.valorCalculado = valorDiaria;
         }
-
+        this.valorCalculado = this.valorCalculado.setScale(2, RoundingMode.HALF_UP);
         return this.valorCalculado;
     }
 }
