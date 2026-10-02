@@ -137,7 +137,7 @@ public class Estacionamento {
         return false;
     }
 
-    public BigDecimal calcularValor() {
+    public BigDecimal calcularValor(BigDecimal valorPorMinuto, BigDecimal valorDiaria) {
 
         Duration duracao = Duration.between(entrada, saida);
         long minutos = duracao.toMinutes();

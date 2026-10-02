@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 import br.com.estacionamento.database.DatabaseConnection;
 import br.com.estacionamento.model.Estacionamento;
@@ -138,5 +140,57 @@ public class EstacionamentoRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<Estacionamento> buscarHistory(String placa) {
+        String sql = """
+                SELECT *
+                FROM estacionamentos
+                WHERE placa = ?
+                """;
+
+        List<Estacionamento> historico = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, placa);
+            var resultado = stmt.executeQuery(); 
+            while (resultado.next()) {
+                Estacionamento estacionamento = new Estacionamento();
+                estacionamento.setPlaca(resultado.getString("placa"));
+
+                String entrada = resultado.getString("entrada");
+                estacionamento.setEntrada(LocalDateTime.parse(entrada));
+
+                estacionamento.setId(resultado.getLong("id"));
+
+                String status = resultado.getString("status");
+                estacionamento.setStatus(Estacionamento.Status.valueOf(status));
+
+                String saida = resultado.getString("saida");
+
+                if (saida != null) {
+                    estacionamento.setSaida(LocalDateTime.parse(saida));
+                }
+
+                 String valorCalculado = resultado.getString("valor_calculado");
+
+                if (valorCalculado != null) {
+                    estacionamento.setValorCalculado(new BigDecimal(valorCalculado));
+                }
+
+                String valorFinal = resultado.getString("valor_final");
+                if (valorFinal != null) {
+                    estacionamento.setValorFinal(new BigDecimal(valorFinal));
+                }
+
+                historico.add(estacionamento);
+            }
+        return historico;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return historico;
+
     }
 }
