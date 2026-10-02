@@ -37,6 +37,10 @@ public class EstacionamentoService {
             return false;
         }
 
+        if (saida.isBefore(estacionamento.getEntrada())) {
+            return false;
+        }
+
         estacionamento.setSaida(saida);
         estacionamento.calcularValor(new BigDecimal("0.1666666667"), new BigDecimal("20.00"));
         estacionamento.setStatus(Estacionamento.Status.FINALIZADO);

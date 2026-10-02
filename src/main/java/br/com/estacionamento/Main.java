@@ -19,27 +19,28 @@ public class Main {
         EstacionamentoService service = new EstacionamentoService(repository);
 
         // boolean entrou = service.registrarEntrada(
-        // "ABC9999",
+        // "ABC9995",
         // LocalDateTime.of(2026, 10, 1, 20, 0));
 
         // System.out.println("Entrada registrada? " + entrou);
 
-        // boolean saiu = service.registrarSaida(
-        // "ABC9999",
-        // LocalDateTime.of(2026, 10, 1, 22, 0));
+        boolean saiu = service.registrarSaida(
+        "ZZZ9995",
+        LocalDateTime.of(2026, 10, 1, 22, 0));
 
-        // System.out.println("Saída registrada? " + saiu);
+        System.out.println("Saída registrada? " + saiu);
 
-        List<Estacionamento> historico = service.buscarHistory("ABC9999");
+        List<Estacionamento> historico = service.buscarHistory("ZZZ9995");
         System.out.println(historico);
         for (Estacionamento estacionamento : historico) {
             System.out.println(estacionamento.getPlaca());
-            System.out.println(estacionamento.getEntrada());
-            System.out.println(estacionamento.getSaida());
-            System.out.println(estacionamento.getStatus());
-            System.out.println(estacionamento.getValorCalculado());
-            System.out.println(estacionamento.getValorFinal());
-        }
+           System.out.println(estacionamento.getEntrada());
+           System.out.println(estacionamento.getSaida());
+           System.out.println(estacionamento.getStatus());
+           System.out.println(estacionamento.getValorCalculado());
+           System.out.println(estacionamento.getValorFinal());
+       }
+
     }
 
 }
