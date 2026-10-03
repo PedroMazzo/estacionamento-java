@@ -22,8 +22,12 @@ public class EstacionamentoService {
         }
         Estacionamento estacionamento = new Estacionamento();
 
-        estacionamento.setPlaca(placa);
-        estacionamento.setEntrada(entrada);
+        if (!estacionamento.setPlaca(placa)){
+            return false;
+        }
+         if (!estacionamento.setEntrada(entrada)){
+            return false;
+         }
 
         return repository.salvar(estacionamento);
 
