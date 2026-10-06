@@ -113,7 +113,8 @@ public class EstacionamentoRepository {
 
     }
 
-    public boolean registrarSaida(String placa, LocalDateTime saida, Estacionamento.Status status, BigDecimal valorCalculado,
+    public boolean registrarSaida(String placa, LocalDateTime saida, Estacionamento.Status status,
+            BigDecimal valorCalculado,
             BigDecimal valorFinal) {
         String sql = """
                 UPDATE estacionamentos
@@ -153,7 +154,7 @@ public class EstacionamentoRepository {
         try (Connection conn = DatabaseConnection.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, placa);
-            var resultado = stmt.executeQuery(); 
+            var resultado = stmt.executeQuery();
             while (resultado.next()) {
                 Estacionamento estacionamento = new Estacionamento();
                 estacionamento.setPlaca(resultado.getString("placa"));
@@ -172,7 +173,7 @@ public class EstacionamentoRepository {
                     estacionamento.setSaida(LocalDateTime.parse(saida));
                 }
 
-                 String valorCalculado = resultado.getString("valor_calculado");
+                String valorCalculado = resultado.getString("valor_calculado");
 
                 if (valorCalculado != null) {
                     estacionamento.setValorCalculado(new BigDecimal(valorCalculado));
@@ -185,12 +186,49 @@ public class EstacionamentoRepository {
 
                 historico.add(estacionamento);
             }
-        return historico;
+            return historico;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return historico;
 
+    }
+
+    public List<Estacionamento> buscarTodosAtivos() {
+
+        String sql = """
+                SELECT *
+                FROM estacionamentos
+                WHERE status = 'ATIVO'
+                """;
+        List<Estacionamento> ativos = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            var resultado = stmt.executeQuery();
+            while (resultado.next()) {
+                Estacionamento estacionamento = new Estacionamento();
+                estacionamento.setPlaca(resultado.getString("placa"));
+
+                String entrada = resultado.getString("entrada");
+                estacionamento.setEntrada(LocalDateTime.parse(entrada));
+
+                estacionamento.setId(resultado.getLong("id"));
+
+                String status = resultado.getString("status");
+                estacionamento.setStatus(Estacionamento.Status.valueOf(status));
+
+                String saida = resultado.getString("saida");
+                if (saida != null){
+                estacionamento.setSaida(LocalDateTime.parse(saida));
+                }
+                ativos.add(estacionamento);
+            }
+
+            return ativos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ativos;
     }
 }

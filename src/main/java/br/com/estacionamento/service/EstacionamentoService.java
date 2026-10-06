@@ -61,4 +61,8 @@ public class EstacionamentoService {
         return repository.buscarHistory(placa);
     }
 
+    public List<Estacionamento> buscarTodosAtivos () {
+        return repository.buscarTodosAtivos();
+    }
+
 }

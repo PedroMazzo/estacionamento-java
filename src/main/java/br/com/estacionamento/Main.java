@@ -31,17 +31,26 @@ public class Main {
 
         System.out.println("Saída registrada? " + saiu);
 
-        List<Estacionamento> historico = service.buscarHistory("ZZZ9995");
-        System.out.println(historico);
-        for (Estacionamento estacionamento : historico) {
+    //     List<Estacionamento> historico = service.buscarHistory("ZZZ9995");
+    //     System.out.println(historico);
+    //     for (Estacionamento estacionamento : historico) {
+    //         System.out.println(estacionamento.getPlaca());
+    //        System.out.println(estacionamento.getEntrada());
+    //        System.out.println(estacionamento.getSaida());
+    //        System.out.println(estacionamento.getStatus());
+    //        System.out.println(estacionamento.getValorCalculado());
+    //        System.out.println(estacionamento.getValorFinal());
+    //    }
+
+       List<Estacionamento> ativos = service.buscarTodosAtivos();
+        System.out.println(ativos);
+        for (Estacionamento estacionamento : ativos) {
             System.out.println(estacionamento.getPlaca());
            System.out.println(estacionamento.getEntrada());
-           System.out.println(estacionamento.getSaida());
            System.out.println(estacionamento.getStatus());
-           System.out.println(estacionamento.getValorCalculado());
-           System.out.println(estacionamento.getValorFinal());
-       }
+
 
     }
 
+}
 }
