@@ -33,7 +33,7 @@ public class EstacionamentoService {
 
     }
 
-    public boolean registrarSaida(String placa, LocalDateTime saida) {
+    public boolean registrarSaida(String placa, LocalDateTime saida, BigDecimal valorFinal) {
 
         Estacionamento estacionamento = repository.buscarAtivo(placa);
 
@@ -48,7 +48,9 @@ public class EstacionamentoService {
         estacionamento.setSaida(saida);
         estacionamento.calcularValor(new BigDecimal("0.1666666667"), new BigDecimal("20.00"));
         estacionamento.setStatus(Estacionamento.Status.FINALIZADO);
-        estacionamento.setValorFinal(estacionamento.getValorCalculado());
+        if (!estacionamento.setValorFinal(valorFinal)){
+            return false;
+        }
 
         return repository.registrarSaida(placa, saida, estacionamento.getStatus(), estacionamento.getValorCalculado(),
                 estacionamento.getValorFinal());
