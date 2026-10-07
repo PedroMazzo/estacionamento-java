@@ -22,12 +22,12 @@ public class EstacionamentoService {
         }
         Estacionamento estacionamento = new Estacionamento();
 
-        if (!estacionamento.setPlaca(placa)){
+        if (!estacionamento.setPlaca(placa)) {
             return false;
         }
-         if (!estacionamento.setEntrada(entrada)){
+        if (!estacionamento.setEntrada(entrada)) {
             return false;
-         }
+        }
 
         return repository.salvar(estacionamento);
 
@@ -48,7 +48,7 @@ public class EstacionamentoService {
         estacionamento.setSaida(saida);
         estacionamento.calcularValor(new BigDecimal("0.1666666667"), new BigDecimal("20.00"));
         estacionamento.setStatus(Estacionamento.Status.FINALIZADO);
-        if (!estacionamento.setValorFinal(valorFinal)){
+        if (!estacionamento.setValorFinal(valorFinal)) {
             return false;
         }
 
@@ -61,8 +61,32 @@ public class EstacionamentoService {
         return repository.buscarHistory(placa);
     }
 
-    public List<Estacionamento> buscarTodosAtivos () {
+    public List<Estacionamento> buscarTodosAtivos() {
         return repository.buscarTodosAtivos();
+    }
+
+    public Estacionamento buscarAtivo(String placa) {
+        return repository.buscarAtivo(placa);
+
+    }
+
+    public BigDecimal calcularValorSaida(String placa, LocalDateTime saida) {
+
+        Estacionamento estacionamento = repository.buscarAtivo(placa);
+
+        if (estacionamento == null) {
+            return null;
+        }
+
+        if (saida.isBefore(estacionamento.getEntrada())) {
+            return null;
+        }
+
+        estacionamento.setSaida(saida);
+
+        return estacionamento.calcularValor(
+                new BigDecimal("0.1666666667"),
+                new BigDecimal("20.00"));
     }
 
 }
