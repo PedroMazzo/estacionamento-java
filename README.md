@@ -262,7 +262,7 @@ Esse arquivo é criado localmente durante a execução e **não é versionado no
 
 ---
 
-## 🎯 Objetivo do projeto
+## Objetivo do projeto
 
 Este projeto foi desenvolvido como parte do processo de aprendizado e evolução em desenvolvimento de software.
 
