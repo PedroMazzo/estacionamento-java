@@ -22,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -30,108 +31,128 @@ public class Main extends Application {
     private LocalDateTime horarioSaidaCalculado;
     private BigDecimal valorCalculadoSaida;
 
-    private final EstacionamentoService service = new EstacionamentoService(new EstacionamentoRepository());
+    private final EstacionamentoService service =
+            new EstacionamentoService(new EstacionamentoRepository());
+
+    private static final String PRIMARY = "#2563eb";
+    private static final String PRIMARY_DARK = "#1d4ed8";
+    private static final String TEXT = "#172033";
+    private static final String MUTED = "#64748b";
+    private static final String BORDER = "#e2e8f0";
+    private static final String BACKGROUND = "#f5f7fb";
+    private static final String CARD = "#ffffff";
+    private static final String SUCCESS = "#15803d";
+    private static final String DANGER = "#b91c1c";
 
     @Override
     public void start(Stage stage) {
 
         // =========================
-        // TÍTULO
+        // CABEÇALHO
         // =========================
 
-        Label titulo = new Label("ESTACIONAMENTO");
-        titulo.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        Label titulo = new Label("Estacionamento");
+        titulo.getStyleClass().add("app-title");
+
+        Label subtitulo = new Label("Controle de entradas, saídas e veículos ativos");
+        subtitulo.getStyleClass().add("app-subtitle");
+
+        VBox cabecalho = new VBox(4, titulo, subtitulo);
+        cabecalho.getStyleClass().add("header");
 
         // =========================
         // ENTRADA
         // =========================
 
         Label tituloEntrada = new Label("Registrar entrada");
-        tituloEntrada.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        tituloEntrada.getStyleClass().add("card-title");
+
+        Label descricaoEntrada = new Label("Informe a placa para registrar um novo veículo.");
+        descricaoEntrada.getStyleClass().add("card-description");
 
         TextField placaEntrada = new TextField();
-        placaEntrada.setPromptText("Placa");
+        placaEntrada.setPromptText("Ex.: ABC1D23");
+        placaEntrada.getStyleClass().add("input");
 
-        Button botaoEntrada = new Button("ENTRAR");
+        Button botaoEntrada = new Button("Registrar entrada");
+        botaoEntrada.getStyleClass().add("primary-button");
 
         Label mensagemEntrada = new Label();
+        mensagemEntrada.getStyleClass().add("feedback");
 
         TableView<Estacionamento> tabelaAtivos = new TableView<>();
 
-        botaoEntrada.setOnAction(event -> {
+        HBox.setHgrow(placaEntrada, Priority.ALWAYS);
 
-            String placa = placaEntrada.getText();
+        HBox camposEntrada = new HBox(12, placaEntrada, botaoEntrada);
+        camposEntrada.setAlignment(Pos.CENTER_LEFT);
 
-            LocalDateTime horario = LocalDateTime.now();
-
-            boolean entradaSucesso = service.registrarEntrada(placa, horario);
-
-            if (entradaSucesso) {
-
-                mensagemEntrada.setText(
-                        "Entrada registrada com sucesso!");
-
-                tabelaAtivos.getItems().setAll(
-                        service.buscarTodosAtivos());
-
-                placaEntrada.clear();
-
-            } else {
-
-                mensagemEntrada.setText(
-                        "Não foi possível registrar a entrada.");
-            }
-
-            System.out.println("Placa: " + placa);
-            System.out.println("Horário: " + horario);
-        });
-
-        HBox camposEntrada = new HBox(10);
-
-        camposEntrada.getChildren().addAll(
-                placaEntrada,
-                botaoEntrada);
-
-        VBox cardEntrada = new VBox(10);
-
-        cardEntrada.setPadding(new Insets(15));
-
-        cardEntrada.setStyle(
-                "-fx-border-color: #cccccc;" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;");
-
-        cardEntrada.getChildren().addAll(
+        VBox cardEntrada = criarCard(
                 tituloEntrada,
+                descricaoEntrada,
                 camposEntrada,
-                mensagemEntrada);
+                mensagemEntrada
+        );
 
         // =========================
         // SAÍDA
         // =========================
 
         Label tituloSaida = new Label("Registrar saída");
-        tituloSaida.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        tituloSaida.getStyleClass().add("card-title");
+
+        Label descricaoSaida = new Label(
+                "Calcule o valor, ajuste o valor final se necessário e finalize."
+        );
+        descricaoSaida.getStyleClass().add("card-description");
 
         TextField placaSaida = new TextField();
         placaSaida.setPromptText("Placa");
+        placaSaida.getStyleClass().add("input");
 
         TextField valorCalculado = new TextField();
         valorCalculado.setPromptText("Valor calculado");
         valorCalculado.setEditable(false);
+        valorCalculado.getStyleClass().addAll("input", "readonly-input");
 
         TextField valorFinal = new TextField();
         valorFinal.setPromptText("Valor final");
+        valorFinal.getStyleClass().add("input");
 
-        Button botaoCalcular = new Button("CALCULAR");
+        Button botaoCalcular = new Button("Calcular");
+        botaoCalcular.getStyleClass().add("secondary-button");
 
-        Button botaoFinalizar = new Button("FINALIZAR SAÍDA");
+        Button botaoFinalizar = new Button("Finalizar saída");
+        botaoFinalizar.getStyleClass().add("success-button");
 
         Label mensagemSaida = new Label();
+        mensagemSaida.getStyleClass().add("feedback");
 
-        // -------------------------
+        GridPane camposSaida = new GridPane();
+        camposSaida.setHgap(12);
+        camposSaida.setVgap(10);
+
+        camposSaida.add(placaSaida, 0, 0);
+        camposSaida.add(valorCalculado, 1, 0);
+
+        camposSaida.add(valorFinal, 0, 1);
+        camposSaida.add(botaoCalcular, 1, 1);
+        camposSaida.add(botaoFinalizar, 2, 1);
+
+        GridPane.setHgrow(placaSaida, Priority.ALWAYS);
+        GridPane.setHgrow(valorCalculado, Priority.ALWAYS);
+        GridPane.setHgrow(valorFinal, Priority.ALWAYS);
+
+        VBox cardSaida = criarCard(
+                tituloSaida,
+                descricaoSaida,
+                camposSaida,
+                mensagemSaida
+        );
+
+        // =========================
         // CALCULAR SAÍDA
-        // -------------------------
+        // =========================
 
         botaoCalcular.setOnAction(event -> {
 
@@ -141,17 +162,22 @@ public class Main extends Application {
 
             BigDecimal valor = service.calcularValorSaida(
                     placa,
-                    horarioSaidaCalculado);
+                    horarioSaidaCalculado
+            );
 
             if (valor != null) {
 
                 valorCalculadoSaida = valor;
 
-                valorCalculado.setText(valor.toString());
+                valorCalculado.setText("R$ " + valor);
                 valorFinal.setText(valor.toString());
 
+                mensagemSaida.getStyleClass().removeAll("feedback-error");
+                mensagemSaida.getStyleClass().add("feedback-success");
+
                 mensagemSaida.setText(
-                        "Valor calculado com sucesso. Confira o valor final.");
+                        "Valor calculado com sucesso. Confira o valor final."
+                );
 
             } else {
 
@@ -161,30 +187,48 @@ public class Main extends Application {
                 valorCalculado.clear();
                 valorFinal.clear();
 
+                mensagemSaida.getStyleClass().removeAll("feedback-success");
+                mensagemSaida.getStyleClass().add("feedback-error");
+
                 mensagemSaida.setText(
-                        "Não foi possível calcular a saída. Verifique a placa.");
+                        "Não foi possível calcular. Verifique a placa."
+                );
             }
         });
+
+        // =========================
+        // FINALIZAR SAÍDA
+        // =========================
 
         botaoFinalizar.setOnAction(event -> {
 
             String placa = placaSaida.getText();
 
             if (horarioSaidaCalculado == null || valorCalculadoSaida == null) {
+
+                mensagemSaida.getStyleClass().removeAll("feedback-success");
+                mensagemSaida.getStyleClass().add("feedback-error");
+
                 mensagemSaida.setText(
-                        "Calcule a saída antes de finalizar.");
+                        "Calcule a saída antes de finalizar."
+                );
                 return;
             }
 
             BigDecimal valorFinalInformado;
 
             try {
-                valorFinalInformado = new BigDecimal(valorFinal.getText());
+                valorFinalInformado =
+                        new BigDecimal(valorFinal.getText().replace(",", "."));
 
             } catch (NumberFormatException e) {
 
+                mensagemSaida.getStyleClass().removeAll("feedback-success");
+                mensagemSaida.getStyleClass().add("feedback-error");
+
                 mensagemSaida.setText(
-                        "Informe um valor final válido.");
+                        "Informe um valor final válido."
+                );
 
                 return;
             }
@@ -192,15 +236,21 @@ public class Main extends Application {
             boolean sucesso = service.registrarSaida(
                     placa,
                     horarioSaidaCalculado,
-                    valorFinalInformado);
+                    valorFinalInformado
+            );
 
             if (sucesso) {
 
+                mensagemSaida.getStyleClass().removeAll("feedback-error");
+                mensagemSaida.getStyleClass().add("feedback-success");
+
                 mensagemSaida.setText(
-                        "Saída registrada com sucesso!");
+                        "Saída registrada com sucesso."
+                );
 
                 tabelaAtivos.getItems().setAll(
-                        service.buscarTodosAtivos());
+                        service.buscarTodosAtivos()
+                );
 
                 placaSaida.clear();
                 valorCalculado.clear();
@@ -211,67 +261,43 @@ public class Main extends Application {
 
             } else {
 
+                mensagemSaida.getStyleClass().removeAll("feedback-success");
+                mensagemSaida.getStyleClass().add("feedback-error");
+
                 mensagemSaida.setText(
-                        "Não foi possível registrar a saída.");
+                        "Não foi possível registrar a saída."
+                );
             }
         });
-
-        // -------------------------
-        // CAMPOS DA SAÍDA
-        // -------------------------
-
-        GridPane camposSaida = new GridPane();
-
-        camposSaida.setHgap(10);
-        camposSaida.setVgap(10);
-
-        camposSaida.add(placaSaida, 0, 0);
-        camposSaida.add(valorCalculado, 1, 0);
-
-        camposSaida.add(valorFinal, 0, 1);
-        camposSaida.add(botaoCalcular, 1, 1);
-        camposSaida.add(botaoFinalizar, 2, 1);
-
-        VBox cardSaida = new VBox(10);
-
-        cardSaida.setPadding(new Insets(15));
-
-        cardSaida.setStyle(
-                "-fx-border-color: #cccccc;" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;");
-
-        cardSaida.getChildren().addAll(
-                tituloSaida,
-                camposSaida,
-                mensagemSaida);
 
         // =========================
         // VEÍCULOS ATIVOS
         // =========================
 
         Label tituloAtivos = new Label("Veículos ativos");
-        tituloAtivos.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        tituloAtivos.getStyleClass().add("card-title");
 
-        DateTimeFormatter formatoDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        Label descricaoAtivos = new Label(
+                "Veículos atualmente registrados no estacionamento."
+        );
+        descricaoAtivos.getStyleClass().add("card-description");
 
-        // -------------------------
-        // COLUNA PLACA
-        // -------------------------
+        DateTimeFormatter formatoDataHora =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        TableColumn<Estacionamento, String> colunaPlaca = new TableColumn<>("Placa");
+        TableColumn<Estacionamento, String> colunaPlaca =
+                new TableColumn<>("Placa");
 
         colunaPlaca.setCellValueFactory(
-                new PropertyValueFactory<>("placa"));
+                new PropertyValueFactory<>("placa")
+        );
 
-        // -------------------------
-        // COLUNA ENTRADA
-        // -------------------------
-
-        TableColumn<Estacionamento, LocalDateTime> colunaEntrada = new TableColumn<>("Entrada");
+        TableColumn<Estacionamento, LocalDateTime> colunaEntrada =
+                new TableColumn<>("Entrada");
 
         colunaEntrada.setCellValueFactory(
-                new PropertyValueFactory<>("entrada"));
+                new PropertyValueFactory<>("entrada")
+        );
 
         colunaEntrada.setCellFactory(coluna -> new TableCell<>() {
 
@@ -279,90 +305,131 @@ public class Main extends Application {
             protected void updateItem(
                     LocalDateTime entrada,
                     boolean empty) {
+
                 super.updateItem(entrada, empty);
 
                 if (empty || entrada == null) {
-
                     setText(null);
-
                 } else {
-
-                    setText(
-                            entrada.format(formatoDataHora));
+                    setText(entrada.format(formatoDataHora));
                 }
             }
         });
 
-        // -------------------------
-        // COLUNA STATUS
-        // -------------------------
-
-        TableColumn<Estacionamento, Estacionamento.Status> colunaStatus = new TableColumn<>("Status");
+        TableColumn<Estacionamento, Estacionamento.Status> colunaStatus =
+                new TableColumn<>("Status");
 
         colunaStatus.setCellValueFactory(
-                new PropertyValueFactory<>("status"));
+                new PropertyValueFactory<>("status")
+        );
 
-        // -------------------------
-        // CARREGAR ATIVOS
-        // -------------------------
+        colunaStatus.setCellFactory(coluna -> new TableCell<>() {
 
-        tabelaAtivos.getItems().addAll(
-                service.buscarTodosAtivos());
+            @Override
+            protected void updateItem(
+                    Estacionamento.Status status,
+                    boolean empty) {
+
+                super.updateItem(status, empty);
+
+                if (empty || status == null) {
+                    setText(null);
+                    getStyleClass().removeAll("status-active");
+                } else {
+                    setText("ATIVO");
+                    getStyleClass().add("status-active");
+                }
+            }
+        });
 
         tabelaAtivos.getColumns().addAll(
                 colunaPlaca,
                 colunaEntrada,
-                colunaStatus);
+                colunaStatus
+        );
+
+        colunaPlaca.prefWidthProperty().bind(
+                tabelaAtivos.widthProperty().multiply(0.30)
+        );
+
+        colunaEntrada.prefWidthProperty().bind(
+                tabelaAtivos.widthProperty().multiply(0.45)
+        );
+
+        colunaStatus.prefWidthProperty().bind(
+                tabelaAtivos.widthProperty().multiply(0.25)
+        );
+
+        tabelaAtivos.getItems().setAll(
+                service.buscarTodosAtivos()
+        );
 
         tabelaAtivos.setPlaceholder(
-                new Label("Nenhum veículo estacionado"));
+                new Label("Nenhum veículo estacionado no momento.")
+        );
 
-        VBox cardAtivos = new VBox(10);
+        tabelaAtivos.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS
+        );
 
-        cardAtivos.setPadding(new Insets(15));
+        VBox.setVgrow(tabelaAtivos, Priority.ALWAYS);
 
-        cardAtivos.getChildren().addAll(
+        VBox cardAtivos = criarCard(
                 tituloAtivos,
-                tabelaAtivos);
+                descricaoAtivos,
+                tabelaAtivos
+        );
 
         // =========================
         // RODAPÉ
         // =========================
 
-        Button botaoHistorico = new Button("VER HISTÓRICO");
+        Button botaoHistorico = new Button("Ver histórico");
+        botaoHistorico.getStyleClass().add("outline-button");
 
         HBox rodape = new HBox(botaoHistorico);
-
         rodape.setAlignment(Pos.CENTER_RIGHT);
 
         // =========================
-        // CONTEÚDO PRINCIPAL
+        // CONTEÚDO
         // =========================
 
-        VBox conteudo = new VBox(20);
-
-        conteudo.setPadding(new Insets(20));
-
-        conteudo.getChildren().addAll(
-                titulo,
+        VBox conteudo = new VBox(
+                18,
+                cabecalho,
                 cardEntrada,
                 cardSaida,
                 cardAtivos,
-                rodape);
+                rodape
+        );
 
-        // =========================
-        // JANELA
-        // =========================
+        conteudo.setPadding(new Insets(28));
+        conteudo.setMaxWidth(1100);
 
         BorderPane root = new BorderPane();
-
         root.setCenter(conteudo);
+        root.getStyleClass().add("root");
 
-        Scene scene = new Scene(root, 1000, 700);
+        Scene scene = new Scene(root, 1100, 820);
+
+        scene.getStylesheets().add(
+                getClass().getResource("/styles.css").toExternalForm()
+        );
 
         stage.setTitle("Estacionamento");
+        stage.setMinWidth(950);
+        stage.setMinHeight(700);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private VBox criarCard(javafx.scene.Node... elementos) {
+
+        VBox card = new VBox(10);
+        card.getStyleClass().add("card");
+        card.getChildren().addAll(elementos);
+
+        return card;
     }
 
     public static void main(String[] args) {

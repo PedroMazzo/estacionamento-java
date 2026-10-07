@@ -1,4 +1,13 @@
+# Maven
 target/
+
+# Java
 *.class
+
+# SQLite
 *.db
+*.db-shm
+*.db-wal
+
+# VS Code
 .vscode/
