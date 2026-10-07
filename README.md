@@ -1,4 +1,4 @@
-# 🚗 Estacionamento
+# Estacionamento
 
 Sistema de gerenciamento de estacionamento desenvolvido em Java, com interface gráfica em JavaFX e persistência de dados utilizando SQLite.
 
@@ -6,7 +6,7 @@ O projeto foi desenvolvido como um projeto de estudo e portfólio, com foco prin
 
 ---
 
-## 📌 Sobre o projeto
+## Sobre o projeto
 
 O sistema tem como objetivo controlar a entrada e saída de veículos de um estacionamento, mantendo um histórico das movimentações e permitindo que o operador acompanhe os veículos atualmente estacionados.
 
@@ -16,7 +16,7 @@ A interface gráfica foi desenvolvida utilizando JavaFX.
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 ### Entrada de veículos
 
@@ -51,7 +51,7 @@ A interface gráfica foi desenvolvida utilizando JavaFX.
 
 ---
 
-## 💰 Regra de cálculo
+## Regra de cálculo
 
 O sistema utiliza inicialmente uma regra de cobrança proporcional ao tempo de permanência.
 
@@ -70,7 +70,7 @@ O `valorFinal` é independente e pode ser alterado manualmente antes da finaliza
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O projeto utiliza uma arquitetura organizada em camadas, separando responsabilidades entre interface, regras de negócio e persistência.
 
@@ -146,7 +146,7 @@ DatabaseInitializer
 
 ---
 
-## 📂 Estrutura do projeto
+## Estrutura do projeto
 
 ```text
 src/
@@ -173,7 +173,7 @@ src/
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - **Java 17**
 - **Maven**
@@ -184,7 +184,7 @@ src/
 
 ---
 
-## ▶️ Como executar
+## Como executar
 
 ### Pré-requisitos
 
@@ -215,7 +215,7 @@ Na primeira execução, o sistema cria automaticamente o banco de dados SQLite u
 
 ---
 
-## 🗄️ Banco de dados
+##  Banco de dados
 
 O projeto utiliza SQLite para manter a aplicação simples e local.
 
@@ -229,7 +229,7 @@ Esse arquivo é criado localmente durante a execução e **não é versionado no
 
 ---
 
-## 📋 Status do projeto
+##  Status do projeto
 
 ### Implementado
 
@@ -284,7 +284,7 @@ O projeto também serve como laboratório para experimentar decisões de arquite
 
 ---
 
-## 🖥️ Nota sobre a interface
+## Nota sobre a interface
 
 A interface gráfica foi desenvolvida em JavaFX como camada de apresentação do sistema.
 
@@ -294,7 +294,7 @@ A implementação visual da interface não representa o principal objetivo de ap
 
 ---
 
-## 🤖 Agradecimentos
+## Disclaimer
 
 Este projeto foi desenvolvido de forma incremental durante um processo de estudo, utilizando ferramentas de IA como apoio para pesquisa, revisão de código, discussão de arquitetura, resolução de problemas e exploração de conceitos.
 
@@ -304,22 +304,6 @@ Um agradecimento especial ao **Sodo**, assistente utilizado durante o desenvolvi
 
 ---
 
-## 📚 Aprendizado
+## Aprendizado
 
 Mais do que simplesmente construir uma aplicação funcional, este projeto representa uma etapa de aprendizado prático em desenvolvimento Java.
-
-A ideia é continuar evoluindo o sistema conforme novos conceitos são aprendidos, mantendo o projeto como um laboratório para experimentar arquitetura, banco de dados, testes, interfaces e novas funcionalidades.
-
----
-
-## 👨‍💻 Desenvolvedor
-
-**Pedro Mazzo**
-
-Estudante de Ciência da Computação com foco em desenvolvimento de software, infraestrutura e cybersecurity.
-
----
-
-## 📄 Licença
-
-Este projeto foi desenvolvido para fins de estudo e portfólio.
